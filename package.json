@@ -1,7 +1,7 @@
 {
-    "name": "blip-document-validator",
+    "name": "balihoo-budget-lib",
     "version": "1.0.0",
-    "description": "BLIP document object validator",
+    "description": "Utility library to manipulate budgets",
     "repository": {
         "type": "git",
         "url": "https://github.com/balihoo/balihoo-budget-lib.git"
