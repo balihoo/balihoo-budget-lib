@@ -2,43 +2,88 @@
 
 <!-- Start src/Budget.coffee -->
 
-A validation error.
+<!-- End src/Budget.coffee -->
 
-### Properties:
+<!-- Start src/BudgetUtil.coffee -->
 
-* **string** *parameter* Invalid field name.
-* **message** *parameter* Validation constraint message.
-* **value** *parameter* Provided value.
+## validate(budgets)
 
-Balihoo budget.
-
-Budget validation result.
-
-### Properties:
-
-* **array** *errors*               Errors found during validation process.
-* **boolean** *valid*               Indication whether validation was successful or not.
-
-Holds budget related computations.
-
-## validate()
-
-Validation all the specified budgets.
-
-### Return:
-
-* **ValidationResult** a validation result.
-
-## findApplicable(budgets, targetDate)
+### Example:
+      var BudgetUtil = require('balihoo-budget-lib');
+      var myBudgets = [
+        {
+            "amount": 500,
+            "startDate": "2016-01-01",
+            "endDate": "2016-04-30"
+        }
+      ];
+      var validation = BudgetUtil.validate(myBudgets);
+      if (validation.valid === true) {
+        // deal with valid budgets!
+      }
+  
+    Validates all budgets in the specified list.
 
 ### Params:
 
-* **array** *budgets*              Sequence of budget objects
-* **string** *targetDate*              A date to find budget for.
+* **Array.\<Budget>** *budgets* - A list of budgets to validate.
 
 ### Return:
 
-* **number**               A budget amount for the date, or null if no budget applicable for date.
+* **ValidationResult** Budget validation result.
 
-<!-- End src/Budget.coffee -->
+## findApplicable(budgets, targetDate)
+
+### Examples
+      var BudgetUtil = require('balihoo-budget-lib');
+      var myBudgets = [
+        {
+            "amount": 500,
+            "startDate": "2016-01-01",
+            "endDate": "2016-04-30"
+        }
+      ];
+      // "myBudgets" should be validated at this point
+      var amount = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
+      // deal with amount...
+  
+    Finds the applicable budget amount within the given budgets.
+
+### Params:
+
+* **Array.\<Budget>** *budgets* - A list of valid budget objects.
+* **String** *targetDate* - A MomentJS compatible date string.
+
+### Return:
+
+* **Number** The applicable budget amount for the specified date.
+
+## Budget
+
+### Properties:
+
+* **Number** *amount* - Available amount of money for the budget period.
+* **String** *startDate* - MomentJS-compatible date for budget period start.
+* **String** *endDate* - MomentJS-compatible date for budget period end.
+
+## ValidationResult
+
+### Properties:
+
+* **Array.\<ValidationError>** *errors* - Details for all validation errors.
+* **Boolean** *valid* - Whether all budgets are valid or not.
+
+## ValidationError
+
+### Properties:
+
+* **String** *parameter* - Name of bad property.
+* **String** *message* - Details about the failed validation.
+* **String** *value* - Provided value.
+
+<!-- End src/BudgetUtil.coffee -->
+
+<!-- Start src/ValidationError.coffee -->
+
+<!-- End src/ValidationError.coffee -->
 
