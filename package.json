@@ -1,15 +1,15 @@
 {
     "name": "balihoo-budget-lib",
-    "version": "1.0.1",
-    "description": "Utility library to manipulate budgets",
+    "version": "1.0.2",
+    "description": "Utility library to manipulate Balihoo marketing budgets.",
     "repository": {
         "type": "git",
         "url": "https://github.com/balihoo/balihoo-budget-lib.git"
     },
     "license": "MIT",
     "devDependencies": {
-        "coffee-script": "1.10.0",
         "chai": "3.5.0",
+        "coffee-script": "1.10.0",
         "del": "2.2.0",
         "gulp": "3.9.1",
         "gulp-coffee": "2.3.1",
@@ -17,12 +17,11 @@
         "gulp-coffee-istanbul": "0.8.1",
         "gulp-markdox2": "1.9.94",
         "gulp-mocha": "2.2.0",
-        "gulp-watch": "4.3.5",
-        "lodash": "4.5.1"
+        "gulp-watch": "4.3.5"
     },
     "dependencies": {
         "moment": "2.11.2",
-        "string": "3.3.1"
+        "lodash": "4.5.1"
     },
     "scripts": {
         "test": "gulp test"
