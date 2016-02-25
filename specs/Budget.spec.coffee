@@ -8,9 +8,31 @@ describe 'budget', ->
 
   describe '#validate', ->
 
-    it 'should check amount property existence', ->
+    it 'should check "budgets" is an array with at least 1 element', ->
+      result = budget.validate undefined
+      result.valid.should.equal false
+      result.errors.should.be.deep.equal [
+        parameter: 'budgets'
+        message: 'Invalid budgets array specified.'
+        value: undefined
+      ]
+      result = budget.validate null
+      result.valid.should.equal false
+      result.errors.should.be.deep.equal [
+        parameter: 'budgets'
+        message: 'Invalid budgets array specified.'
+        value: null
+      ]
+      result = budget.validate []
+      result.valid.should.equal false
+      result.errors.should.be.deep.equal [
+        parameter: 'budgets'
+        message: 'Invalid budgets array specified.'
+        value: []
+      ]
+
+    it 'should check amount property', ->
       result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
         { startDate: '2016-01-01', endDate: '2016-04-30' }
       ]
       result.should.be.an 'object'
@@ -19,13 +41,12 @@ describe 'budget', ->
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { parameter: 'amount', message: 'Required value.', value: undefined }
+        parameter: 'amount'
+        message: 'Required value.'
+        value: undefined
       ]
-
-    it 'should check amount is a number', ->
       result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 'invalid' }
+        { amount: 'invalid', startDate: '2016-01-01', endDate: '2016-04-30' }
       ]
       result.should.be.an 'object'
       result.should.have.property 'valid'
@@ -33,13 +54,23 @@ describe 'budget', ->
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { parameter: 'amount', message: 'Incorrect type. Expected number.', value: 'invalid' }
+        parameter: 'amount'
+        message: 'Incorrect type. Expected number.'
+        value: 'invalid'
       ]
-
-    it 'should check startDate property existence', ->
       result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { endDate: '2016-04-30', amount: 750 }
+        { amount: 500, startDate: '2016-01-01', endDate: '2016-04-30' }
+      ]
+      result.should.be.an 'object'
+      result.should.have.property 'valid'
+      result.should.have.property 'errors'
+      result.valid.should.equal true
+      result.errors.should.be.an 'array'
+      result.errors.should.be.empty
+
+    it 'should check startDate property', ->
+      result = budget.validate [
+        { endDate: '2016-04-30', amount: 1 }
       ]
       result.should.be.an 'object'
       result.should.have.property 'valid'
@@ -47,13 +78,12 @@ describe 'budget', ->
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { parameter: 'startDate', message: 'Required value.', value: undefined }
+        parameter: 'startDate'
+        message: 'Required value.'
+        value: undefined
       ]
-
-    it 'should check startDate property format', ->
       result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { startDate: '20160101', endDate: '2016-04-30', amount: 750 }
+        { startDate: 'not a moment', endDate: '2016-04-30', amount: 1 }
       ]
       result.should.be.an 'object'
       result.should.have.property 'valid'
@@ -61,12 +91,13 @@ describe 'budget', ->
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { parameter: 'startDate', message: 'Invalid value. Value must match required pattern.', value: '20160101' }
+        parameter: 'startDate'
+        message: 'Invalid value. Value must be a moment.'
+        value: 'not a moment'
       ]
 
-    it 'should check endDate property existence', ->
+    it 'should check endDate property', ->
       result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
         { startDate: '2016-01-01', amount: 750 }
       ]
       result.should.be.an 'object'
@@ -75,13 +106,12 @@ describe 'budget', ->
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { parameter: 'endDate', message: 'Required value.', value: undefined }
+        parameter: 'endDate'
+        message: 'Required value.'
+        value: undefined
       ]
-
-    it 'should check startDate property format', ->
       result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { startDate: '2016-01-01', endDate: '20160430', amount: 750 }
+        { startDate: '2016-01-01', endDate: 'not a moment', amount: 1 }
       ]
       result.should.be.an 'object'
       result.should.have.property 'valid'
@@ -89,37 +119,56 @@ describe 'budget', ->
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { parameter: 'endDate', message: 'Invalid value. Value must match required pattern.', value: '20160430' }
+        parameter: 'endDate'
+        message: 'Invalid value. Value must be a moment.'
+        value: 'not a moment'
       ]
 
-    it 'should check overlapping dates (start and end dates are the same)', ->
-      result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { startDate: '2016-05-01', endDate: '2016-05-31', amount: 750 }
-        { startDate: '2016-05-31', endDate: '2016-06-30', amount: 999 }
+    it 'should check overlaps', ->
+      budgets = [
+        { startDate: '2016-01-01', endDate: '2016-01-02', amount: 1 }
+        { startDate: '2016-01-02', endDate: '2016-01-03', amount: 1 }
       ]
+      result = budget.validate budgets
       result.should.be.an 'object'
       result.should.have.property 'valid'
       result.should.have.property 'errors'
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { message: 'Overlapping dates in budgets: 2016-05-31 (endDate) overlaps with 2016-05-31 (startDate)' }
+        message: 'Budget dates are overlapping.'
+        parameter: 'budgets'
+        value: budgets[0..1]
       ]
-
-    it 'should check overlapping dates (2nd interval overlap 1st)', ->
-      result = budget.validate [
-        { startDate: '2016-01-01', endDate: '2016-05-30', amount: 500 }
-        { startDate: '2016-05-01', endDate: '2016-05-31', amount: 750 }
-        { startDate: '2016-06-01', endDate: '2016-06-30', amount: 999 }
+      budgets = [
+        { startDate: '2016-01-01', endDate: '2016-01-02', amount: 1 }
+        { startDate: '2015-12-30', endDate: '2016-01-01', amount: 1 }
       ]
+      result = budget.validate budgets
       result.should.be.an 'object'
       result.should.have.property 'valid'
       result.should.have.property 'errors'
       result.valid.should.equal false
       result.errors.should.be.an 'array'
       result.errors.should.be.deep.equal [
-        { message: 'Overlapping dates in budgets: 2016-01-01 (startDate) overlaps with 2016-05-01 (startDate)' }
+        message: 'Budget dates are overlapping.'
+        parameter: 'budgets'
+        value: budgets[0..1]
+      ]
+      budgets = [
+        { startDate: '2016-01-01', endDate: '2016-01-03', amount: 1 }
+        { startDate: '2016-01-02', endDate: '2016-01-02', amount: 1 }
+      ]
+      result = budget.validate budgets
+      result.should.be.an 'object'
+      result.should.have.property 'valid'
+      result.should.have.property 'errors'
+      result.valid.should.equal false
+      result.errors.should.be.an 'array'
+      result.errors.should.be.deep.equal [
+        message: 'Budget dates are overlapping.'
+        parameter: 'budgets'
+        value: budgets[0..1]
       ]
 
   describe '#findApplicable', ->
@@ -155,28 +204,4 @@ describe 'budget', ->
       ]
       budget.findApplicable(budgets).should.equal 750
 
-  describe '#validateAndFindApplicable', ->
-
-    it 'should return budget for date', ->
-      budgets = [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { startDate: '2016-05-01', endDate: '2016-05-31', amount: 750 }
-        { startDate: '2016-06-01', endDate: '2016-06-30', amount: 999 }
-      ]
-      budget.validateAndFindApplicable(budgets, '2016-05-01').should.equal 750
-
-    it 'should throw if validation fails', ->
-      budgets = [
-        { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
-        { startDate: '2016-05-01', endDate: '2016-05-31', amount: 'invalid' }
-        { startDate: '2016-06-01', endDate: '2016-06-30', amount: 999 }
-      ]
-      try
-        budget.validateAndFindApplicable(budgets, '2016-05-01')
-      catch err
-        err.should.have.property 'result'
-        err.result.should.have.property 'valid'
-        err.result.should.have.property 'errors'
-        err.result.valid.should.equal false
-        err.result.errors.should.not.be.empty
 

@@ -8,6 +8,10 @@ npm install balihoo-budget-lib
 ```
 
 ## Usage
+[API docs](docs/API.md)
+
+#### Example
+
 ```javascript
 
   var budget = require('balihoo-budget-lib');
@@ -19,22 +23,24 @@ npm install balihoo-budget-lib
     }
   ];
 
-  /** Validates budgets and finds today's budget, throws validation errors if any */
-
-  var amount1 = budget.validateAndFindApplicable(myBudgets);
-
-  /** Validates budgets and finds a specific day's budget, throws validation errors if any */
-
-  var amount2 = budget.validateAndFindApplicable(myBudgets, '2016-02-15');
-
-  /** Example with manual validation handling and specified date. */
-  
   var validationResult = budget.validate(myBudgets);
   if (validationResult.valid === true) {
-    var amount3 = budget.findApplicable('2016-02-15');
+    var amount = budget.findApplicable('2016-02-15');
     // ... use amount ...
   } else {
     // ... deal with validationResult.errors ...
   }
 
+```
+
+## Development
+
+#### Requirements
+```
+sudo npm install -g gulp
+```
+
+#### Launch dev mode!
+```
+gulp
 ```

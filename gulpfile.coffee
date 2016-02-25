@@ -1,9 +1,11 @@
-del = require 'del'
+require('coffee-script/register')
+
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
+del = require 'del'
 gulp = require 'gulp'
 istanbul = require 'gulp-coffee-istanbul'
-jsdoc = require 'gulp-jsdoc'
+markdox = require 'gulp-markdox2'
 mocha = require 'gulp-mocha'
 
 jsFiles = [ 'lib/**/*.js' ]
@@ -39,12 +41,13 @@ gulp.task 'cover', ['compile'], ->
         .pipe istanbul.writeReports()
 
 gulp.task 'docs', ['compile'], ->
-  gulp.src jsFiles
-    .pipe(jsdoc('./docs'))
+  gulp.src coffeeFiles
+    .pipe markdox({ concat: "API.md" })
+    .pipe gulp.dest('./docs')
 
 gulp.task 'dev', ['cover'], ->
   gulp.watch coffeeFiles.concat(specFiles), ['cover']
 
-gulp.task 'build', ['clean', 'lint', 'cover']
+gulp.task 'build', ['clean', 'compile']
 
-gulp.task 'default', ['build']
+gulp.task 'default', ['dev']

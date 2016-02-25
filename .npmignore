@@ -1,0 +1,10 @@
+/coverage
+/lib
+/node_modules
+/gulpfile.coffee
+/coffeelint.json
+/.travis.yml
+/.gitignore
+/.editorconfig
+/specs
+/src
