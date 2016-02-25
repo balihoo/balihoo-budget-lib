@@ -14,27 +14,29 @@ combinations = (list) ->
   return _.flatten [pairs, combinations(tail)], true
 
 ###
-  h3 Example:
-    var BudgetUtil = require('balihoo-budget-lib');
-    var myBudgets = [
-      {
-          "amount": 500,
-          "startDate": "2016-01-01",
-          "endDate": "2016-04-30"
-      }
-    ];
-    var validation = BudgetUtil.validate(myBudgets);
-    if (validation.valid === true) {
-      // deal with valid budgets!
-    }
-
   Validates all budgets in the specified list.
   @api public
   @param {Budget[]} budgets - A list of budgets to validate.
   @returns {ValidationResult} Budget validation result.
-
 ###
 module.exports.validate = (budgets) ->
+  ###
+    h3 Example:
+      var BudgetUtil = require('balihoo-budget-lib');
+      var myBudgets = [
+        {
+            "amount": 500,
+            "startDate": "2016-01-01",
+            "endDate": "2016-04-30"
+        }
+      ];
+      var validation = BudgetUtil.validate(myBudgets);
+      if (validation.valid === true) {
+        // deal with valid budgets!
+      }
+  ###
+  -> # hack: terminate jsdoc above
+
   result = new ValidationResult
   if !budgets or !(budgets instanceof Array) or !(budgets.length > 0)
     result.addError new ValidationError 'budgets', 'Invalid budgets array specified.', budgets
@@ -58,7 +60,14 @@ module.exports.validate = (budgets) ->
   result
 
 ###
-
+  Finds the applicable budget amount within the given budgets.
+  @api public
+  @param {Budget[]} budgets - A list of valid budget objects.
+  @param {String} targetDate - A MomentJS compatible date string.
+  @returns {Number} The applicable budget amount for the specified date.
+###
+module.exports.findApplicable = (budgets, targetDate = moment()) ->
+  ###
   h3 Examples
     var BudgetUtil = require('balihoo-budget-lib');
     var myBudgets = [
@@ -71,15 +80,9 @@ module.exports.validate = (budgets) ->
     // "myBudgets" should be validated at this point
     var amount = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
     // deal with amount...
+  ###
+  -> # hack: terminate jsdoc above
 
-  Finds the applicable budget amount within the given budgets.
-  @api public
-  @param {Budget[]} budgets - A list of valid budget objects.
-  @param {String} targetDate - A MomentJS compatible date string.
-  @returns {Number} The applicable budget amount for the specified date.
-
-###
-module.exports.findApplicable = (budgets, targetDate = moment()) ->
   if not moment.isMoment targetDate
     targetDate = moment targetDate
     if not targetDate.isValid()

@@ -8,21 +8,7 @@
 
 ## validate(budgets)
 
-### Example:
-      var BudgetUtil = require('balihoo-budget-lib');
-      var myBudgets = [
-        {
-            "amount": 500,
-            "startDate": "2016-01-01",
-            "endDate": "2016-04-30"
-        }
-      ];
-      var validation = BudgetUtil.validate(myBudgets);
-      if (validation.valid === true) {
-        // deal with valid budgets!
-      }
-  
-    Validates all budgets in the specified list.
+Validates all budgets in the specified list.
 
 ### Params:
 
@@ -32,7 +18,32 @@
 
 * **ValidationResult** Budget validation result.
 
+### Example:
+        var BudgetUtil = require('balihoo-budget-lib');
+        var myBudgets = [
+          {
+              "amount": 500,
+              "startDate": "2016-01-01",
+              "endDate": "2016-04-30"
+          }
+        ];
+        var validation = BudgetUtil.validate(myBudgets);
+        if (validation.valid === true) {
+          // deal with valid budgets!
+        }
+
 ## findApplicable(budgets, targetDate)
+
+Finds the applicable budget amount within the given budgets.
+
+### Params:
+
+* **Array.\<Budget>** *budgets* - A list of valid budget objects.
+* **String** *targetDate* - A MomentJS compatible date string.
+
+### Return:
+
+* **Number** The applicable budget amount for the specified date.
 
 ### Examples
       var BudgetUtil = require('balihoo-budget-lib');
@@ -46,17 +57,6 @@
       // "myBudgets" should be validated at this point
       var amount = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
       // deal with amount...
-  
-    Finds the applicable budget amount within the given budgets.
-
-### Params:
-
-* **Array.\<Budget>** *budgets* - A list of valid budget objects.
-* **String** *targetDate* - A MomentJS compatible date string.
-
-### Return:
-
-* **Number** The applicable budget amount for the specified date.
 
 ## Budget
 
