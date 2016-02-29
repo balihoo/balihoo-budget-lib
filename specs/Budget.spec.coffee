@@ -118,9 +118,12 @@ describe 'budget class', ->
 
     it 'should return true if budget applicable for date', ->
       b = new Budget 1, '2016-01-01', '2016-01-30'
-      b.isApplicable(moment('2016-01-01')).should.be.true
-      b.isApplicable(moment('2016-01-01').add(2, 'hour')).should.be.true
-      b.isApplicable(moment('2016-01-30')).should.be.true
-      b.isApplicable(moment('2016-01-30').add(2, 'hour')).should.be.true
-      b.isApplicable(moment('2016-01-15')).should.be.true
-      b.isApplicable(moment('2015-01-31')).should.be.false
+      b.isApplicable(moment('2015-12-31').endOf('day')).should.be.false
+      b.isApplicable(moment('2016-01-01').startOf('day')).should.be.true
+      b.isApplicable(moment('2016-01-01').add(1, 'millis')).should.be.true
+      b.isApplicable(moment('2016-01-15').startOf('day')).should.be.true
+      b.isApplicable(moment('2016-01-29').endOf('day')).should.be.true
+      b.isApplicable(moment('2016-01-30').startOf('day')).should.be.true
+      b.isApplicable(moment('2016-01-30').endOf('day')).should.be.true
+      b.isApplicable(moment('2016-02-01').startOf('day')).should.be.false
+      b.isApplicable(moment('2015-01-31').startOf('day')).should.be.false

@@ -2,9 +2,17 @@ _ = require 'lodash'
 moment = require 'moment'
 ValidationError = require './ValidationError'
 
+momentHasTime = (aMoment) ->
+  aMoment.milliseconds() > 0 or
+  aMoment.seconds > 0 or
+  aMoment.minutes > 0 or
+  aMoment.hours > 0
+
 # default moment.isBetween() is exclusive, no option provided
 inclusiveIsBetween = (someDate, startDate, endDate) ->
-  start = startDate.startOf 'day'
+  start = startDate
+  if momentHasTime(startDate)
+    start = startDate.startOf 'day'
   end = endDate.endOf 'day'
   someDate.isBetween(start, end) or someDate.isSame(start) or someDate.isSame(end)
 
