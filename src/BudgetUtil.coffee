@@ -66,7 +66,7 @@ module.exports.validate = (budgets) ->
   @param {String} targetDate - A MomentJS compatible date string.
   @returns {Number} The applicable budget amount for the specified date.
 ###
-module.exports.findApplicable = (budgets, targetDate = moment()) ->
+module.exports.findApplicable = (budgets, targetDate = moment.utc()) ->
   ###
   h3 Examples
     var BudgetUtil = require('balihoo-budget-lib');
@@ -84,7 +84,7 @@ module.exports.findApplicable = (budgets, targetDate = moment()) ->
   -> # hack: terminate jsdoc above
 
   if not moment.isMoment targetDate
-    targetDate = moment targetDate
+    targetDate = moment.utc targetDate
     if not targetDate.isValid()
       throw new Error 'Invalid target date provided.'
 

@@ -28,17 +28,17 @@ module.exports = class Budget
 
     if not @startDate
       @errors.push new ValidationError 'startDate', 'Required value.', @startDate
-    else if not moment(@startDate).isValid()
+    else if not moment.utc(@startDate).isValid()
       @errors.push new ValidationError 'startDate', 'Invalid value. Value must be a moment.', @startDate
     else
-      @startDate = moment @startDate
+      @startDate = moment.utc @startDate
 
     if not @endDate
       @errors.push new ValidationError 'endDate', 'Required value.', @endDate
-    else if not moment(@endDate).isValid()
+    else if not moment.utc(@endDate).isValid()
       @errors.push new ValidationError 'endDate', 'Invalid value. Value must be a moment.', @endDate
     else
-      @endDate = moment @endDate
+      @endDate = moment.utc @endDate
 
   isValid: -> @errors.length is 0
 

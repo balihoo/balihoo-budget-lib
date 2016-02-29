@@ -73,8 +73,9 @@ describe 'budget lib', ->
     it 'should return budget for specified date', ->
       budgets = [
         { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
+        { startDate: '2016-05-01', endDate: '2016-07-30', amount: 400 }
       ]
-      b = BudgetUtil.findApplicable budgets, '2016-01-15'
+      b = BudgetUtil.findApplicable budgets, '2016-04-30T00:05:00Z'
       expect(b).to.deep.equal _.head(budgets)
 
     it 'should use today\'s date if date not provided', ->
