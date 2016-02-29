@@ -78,8 +78,8 @@ module.exports.findApplicable = (budgets, targetDate = moment.utc()) ->
       }
     ];
     // "myBudgets" should be validated at this point
-    var amount = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
-    // deal with amount...
+    var budget = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
+    // deal with budget...
   ###
   -> # hack: terminate jsdoc above
 
