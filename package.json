@@ -1,6 +1,6 @@
 {
     "name": "balihoo-budget-lib",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Utility library to manipulate Balihoo marketing budgets.",
     "repository": {
         "type": "git",
