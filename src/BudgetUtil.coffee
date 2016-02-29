@@ -90,7 +90,7 @@ module.exports.findApplicable = (budgets, targetDate = moment()) ->
 
   for budget in budgets
     b = new Budget budget.amount, budget.startDate, budget.endDate
-    if b.isApplicable targetDate then return budget.amount
+    if b.isApplicable targetDate then return budget
 
 ###
   @class Budget

@@ -1,3 +1,4 @@
+_ = require 'lodash'
 assert = require 'assert'
 chai = require 'chai'
 expect = chai.expect
@@ -74,11 +75,11 @@ describe 'budget lib', ->
         { startDate: '2016-01-01', endDate: '2016-04-30', amount: 500 }
       ]
       b = BudgetUtil.findApplicable budgets, '2016-01-15'
-      expect(b).to.equal 500
+      expect(b).to.deep.equal _.head(budgets)
 
     it 'should use today\'s date if date not provided', ->
       budgets = [
         { startDate: '2016-01-01', endDate: '2116-01-01', amount: 500 }
       ]
       b = BudgetUtil.findApplicable budgets
-      expect(b).to.equal 500
+      expect(b).to.deep.equal _.head(budgets)
