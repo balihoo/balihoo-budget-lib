@@ -55,8 +55,8 @@ Finds the applicable budget amount within the given budgets.
         }
       ];
       // "myBudgets" should be validated at this point
-      var amount = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
-      // deal with amount...
+      var budget = BudgetUtil.findApplicable(myBudgets, '2016-02-18');
+      // deal with budget...
 
 ## Budget
 
