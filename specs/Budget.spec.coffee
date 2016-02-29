@@ -119,6 +119,8 @@ describe 'budget class', ->
     it 'should return true if budget applicable for date', ->
       b = new Budget 1, '2016-01-01', '2016-01-30'
       b.isApplicable(moment('2016-01-01')).should.be.true
+      b.isApplicable(moment('2016-01-01').add(2, 'hour')).should.be.true
       b.isApplicable(moment('2016-01-30')).should.be.true
+      b.isApplicable(moment('2016-01-30').add(2, 'hour')).should.be.true
       b.isApplicable(moment('2016-01-15')).should.be.true
       b.isApplicable(moment('2015-01-31')).should.be.false

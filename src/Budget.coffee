@@ -4,9 +4,9 @@ ValidationError = require './ValidationError'
 
 # default moment.isBetween() is exclusive, no option provided
 inclusiveIsBetween = (someDate, startDate, endDate) ->
-  someDate.isBetween(startDate, endDate) or
-  someDate.isSame(startDate) or
-  someDate.isSame(endDate)
+  start = startDate.startOf 'day'
+  end = endDate.endOf 'day'
+  someDate.isBetween(start, end) or someDate.isSame(start) or someDate.isSame(end)
 
 module.exports = class Budget
   constructor: (@amount, @startDate, @endDate) ->
