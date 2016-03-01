@@ -9,7 +9,8 @@ A simple utility library to manipulate Balihoo marketing budgets.
 
 #### Requirements
 ```
-sudo npm i -g gulp
+sudo npm install -g gulp
+npm install
 ```
 
 #### Launch dev mode!
