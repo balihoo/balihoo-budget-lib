@@ -42,6 +42,10 @@ describe 'budget class', ->
       value: 'invalid'
     ]
 
+  it 'should allow 0 dollar budgets', ->
+    b1 = new Budget 0, '2016-01-01', '2016-01-30'
+    b1.errors.should.be.deep.equal []
+
   it 'should validate startDate', ->
     b1 = new Budget 1, undefined, '2016-01-30'
     b1.errors.should.be.deep.equal [

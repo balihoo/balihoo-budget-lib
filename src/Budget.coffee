@@ -21,7 +21,7 @@ module.exports = class Budget
     @errors = []
     @originalData = { @amount, @startDate, @endDate }
 
-    if not @amount
+    if not @amount?
       @errors.push new ValidationError 'amount', 'Required value.', @amount
     else if not (typeof @amount == 'number')
       @errors.push new ValidationError 'amount', 'Incorrect type. Expected number.', @amount
