@@ -17,7 +17,7 @@ inclusiveIsBetween = (someDate, startDate, endDate) ->
   someDate.isBetween(start, end) or someDate.isSame(start) or someDate.isSame(end)
 
 module.exports = class Budget
-  constructor: (@amount, @startDate, @endDate) ->
+  constructor: (@amount, @startDate, @endDate, @shared) ->
     @errors = []
     @originalData = { @amount, @startDate, @endDate }
 
@@ -39,6 +39,20 @@ module.exports = class Budget
       @errors.push new ValidationError 'endDate', 'Invalid value. Value must be a moment.', @endDate
     else
       @endDate = moment.utc @endDate
+
+    if @shared?
+      if typeof @shared isnt 'object'
+        @errors.push new ValidationError 'shared', 'Invalid value.  Value must be an object', @shared
+      else
+        total = 0
+        for key, value of @shared
+          if typeof value isnt 'number'
+            @errors.push new ValidationError "shared.#{key}", 'Invalid value.  Value must be a number', value
+
+          total += value
+
+        if total isnt 100 and @isValid()
+          @errors.push new ValidationError 'shared', 'Invalid value.  Sum of shared budgets must equal 100', @shared
 
   isValid: -> @errors.length is 0
 

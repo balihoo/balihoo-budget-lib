@@ -74,15 +74,49 @@ describe 'budget class', ->
       value: 'not a moment'
     ]
 
+  context 'when shared budgets are supplied', ->
+    it 'should validate that shared is an object', ->
+      b1 = new Budget 1, '2017-01-01', '2017-01-31', "splat"
+      b1.errors.should.be.deep.equal [
+        parameter: 'shared'
+        message: 'Invalid value.  Value must be an object'
+        value: 'splat'
+      ]
+
+    it 'should validate that the shared budgets add up to 100', ->
+      shared =
+        stuff: 10.5
+        things: 20.1
+
+      b1 = new Budget 1, '2017-01-01', '2017-01-31', shared
+      b1.errors.should.be.deep.equal [
+        parameter: 'shared'
+        message: 'Invalid value.  Sum of shared budgets must equal 100'
+        value: shared
+      ]
+
+    it 'should validate that each value within the shared budget object is a number', ->
+      shared =
+        stuff: 10.5
+        things: 'nope!'
+
+      b1 = new Budget 1, '2017-01-01', '2017-01-31', shared
+      b1.errors.should.be.deep.equal [
+        parameter: 'shared.things'
+        message: 'Invalid value.  Value must be a number'
+        value: 'nope!'
+      ]
+
   describe '#isValid', ->
 
     it 'should return false when errors', ->
-      b = new Budget
+      b = new Budget()
       b.isValid().should.be.equal false
 
     it 'should return true when no errors', ->
-      b = new Budget 1, '2016-01-01', '2016-01-30'
+      b = new Budget 1, '2016-01-01', '2016-01-30', {stuff: 75, things: 25}
       b.isValid().should.be.equal true
+
 
   describe '#overlaps', ->
 
