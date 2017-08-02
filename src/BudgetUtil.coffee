@@ -42,7 +42,7 @@ module.exports.validate = (budgets) ->
     result.addError new ValidationError 'budgets', 'Invalid budgets array specified.', budgets
   else
     # lift budget objects
-    budgets = (new Budget(b.amount, b.startDate, b.endDate) for b in budgets)
+    budgets = (new Budget(b.amount, b.startDate, b.endDate, b.shared) for b in budgets)
 
     # phase 1 - unitary validation
     for budget in budgets

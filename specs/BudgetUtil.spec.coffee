@@ -76,7 +76,6 @@ describe 'budget lib', ->
         { startDate: '2016-05-01', endDate: '2016-07-30', amount: 400 }
       ]
       b = BudgetUtil.findApplicable budgets, '2016-04-30T00:05:00Z'
-      console.log b
       expect(b).to.deep.equal _.head(budgets)
 
     it 'should use today\'s date if date not provided', ->
