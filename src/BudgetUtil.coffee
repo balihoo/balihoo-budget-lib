@@ -89,7 +89,7 @@ module.exports.findApplicable = (budgets, targetDate = moment.utc()) ->
       throw new Error 'Invalid target date provided.'
 
   for budget in budgets
-    b = new Budget budget.amount, budget.startDate, budget.endDate
+    b = new Budget budget.amount, budget.startDate, budget.endDate, budget.shared
     if b.isApplicable targetDate then return budget
 
 ###
